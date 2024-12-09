@@ -1,0 +1,5 @@
+npm install @reduxjs/toolkit react-redux
+npm install --save-dev @types/react-redux
+
+
+npm install vitest @testing-library/react @testing-library/jest-dom --save-dev

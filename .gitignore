@@ -1,0 +1,62 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+dist-ssr
+.cache/
+.vite/
+coverage/
+
+# Local env files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Mock data
+mocks/
+*.mock.js
+*.mock.ts
+
+# Temporary files
+*.tmp
+*.temp
+
+# ESLint and Prettier
+.eslintcache
+.prettiercache
+
+# Tailwind CSS
+tailwind.config.js
+tailwind.config.ts
+
+# OS specific files
+Thumbs.db
+desktop.ini
+.AppleDouble
+.LSOverride
+
+# Mock Service Worker
+public/mockServiceWorker.js
