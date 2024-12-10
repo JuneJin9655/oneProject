@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import data from "../../../data.json";
+import { mockInvoices } from "../../mocks/mockData";
 
 const statusSlice = createSlice({
   name: "status",
-  initialState: data,
+  initialState: mockInvoices,
+
   reducers: {
     updateStatus: (state, action) => {
       const { id, status } = action.payload;
@@ -14,6 +15,7 @@ const statusSlice = createSlice({
     },
   },
 });
+console.log("Initial mockInvoices:", mockInvoices);
 
 export const { updateStatus } = statusSlice.actions;
 export default statusSlice.reducer;

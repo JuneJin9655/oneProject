@@ -5,17 +5,17 @@ import { Provider } from "react-redux";
 import store from "./app/store";
 import App from "./App";
 
-if (process.env.NODE_ENV === "development") {
-  const { worker } = require("./mocks/browser");
-  worker.start({
-    onUnhandledRequest: "bypass",
-  });
+async function deferRender() {
+  const { worker } = await import("./mocks/browser.ts");
+  return worker.start();
 }
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>
-);
+deferRender().then(() => {
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </StrictMode>
+  );
+});
