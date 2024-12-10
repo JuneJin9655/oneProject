@@ -6,8 +6,12 @@
 *.tsx text eol=lf
 *.js text eol=lf
 *.json text eol=lf
-*.sh text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
 *.txt text eol=lf
+*.gitattributes text eol=lf
+*.gitignore text eol=lf
 
 # 强制特定文件类型使用 CRLF（如果有需求）
 *.bat text eol=crlf
