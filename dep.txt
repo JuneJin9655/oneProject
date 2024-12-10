@@ -3,3 +3,53 @@ npm install --save-dev @types/react-redux
 
 
 npm install vitest @testing-library/react @testing-library/jest-dom --save-dev
+
+
+
+
+从主分支拉取最新代码：
+git checkout main
+git pull origin main
+
+创建 develop 分支（如果还没有）：
+git checkout -b develop
+git push -u origin develop
+
+每个新功能或任务都从 develop 分支创建独立的分支
+git checkout develop
+git pull origin develop
+git checkout -b feature/user-authentication
+
+开发中阶段性提交代码：
+git add .
+git commit -m "Implement initial user authentication"
+
+推送到远程仓库（便于协作或备份）：
+git push -u origin feature/user-authentication
+
+切换到 develop 分支并拉取最新代码
+git checkout develop
+git pull origin develop
+
+合并功能分支：
+git merge feature/user-authentication
+
+Git 会提示冲突文件，手动解决后添加修改：
+git add <conflicted-file>
+git commit -m "Resolve merge conflicts"
+
+推送到远程仓库：
+git push origin develop
+
+切换到 main 分支并拉取最新代码：
+git checkout main
+git pull origin main
+
+合并 develop 分支：
+git merge develop
+
+打标签发布版本（可选）：
+git tag -a v1.0 -m "Release version 1.0"
+git push origin v1.0
+
+
