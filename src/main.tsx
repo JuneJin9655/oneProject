@@ -6,7 +6,7 @@ import store from "./app/store";
 import App from "./App";
 
 async function deferRender() {
-  const { worker } = await import("./mocks/browser.ts");
+  const { worker } = await import("./mocks/browser");
   return worker.start();
 }
 
@@ -16,6 +16,6 @@ deferRender().then(() => {
       <Provider store={store}>
         <App />
       </Provider>
-    </StrictMode>
+    </StrictMode>,
   );
 });

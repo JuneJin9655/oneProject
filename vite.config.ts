@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
-  server:{
+  server: {
     fs: {
-      allow: ['public', 'src', 'src/mocks'],
+      allow: ["public", "src", "src/mocks"],
     },
   },
   plugins: [react()],

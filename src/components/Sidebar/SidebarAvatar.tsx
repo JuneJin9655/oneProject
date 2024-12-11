@@ -12,7 +12,7 @@ const SidebarAvatar: React.FC = () => {
     <div
       className={clsx(
         "absolute flex h-[117px] w-[103px]", // block style
-        "bottom-[24px] justify-center" // position
+        "bottom-[24px] justify-center", // position
       )}
     >
       {/* Moon Icon */}

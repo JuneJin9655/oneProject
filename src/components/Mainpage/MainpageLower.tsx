@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios, { AxiosError } from "axios";
 import clsx from "clsx";
+import axios from "axios";
+import { p } from "msw/lib/core/GraphQLHandler-Cjm7JNGi";
 
 interface Invoice {
   id: string;
@@ -36,59 +37,49 @@ const StatusBadge: React.FC<{
 );
 
 const MainpageLower: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoding] = useState(true);
+
+  const statusStyles = useMemo(
+    () => ({
+      background: {
+        paid: "bg-green-500",
+        pending: "bg-yellow-500",
+        draft: "bg-gray-500",
+      },
+      circle: {
+        paid: "bg-green-500",
+        pending: "bg-yellow-500",
+        draft: "bg-gray-500",
+      },
+      text: {
+        paid: "text-green-500",
+        pending: "text-yellow-500",
+        draft: "text-gray-500",
+      },
+    }),
+    []
+  );
 
   useEffect(() => {
     const fetchInvoices = async () => {
+      setLoading(true); // 加载状态开始
       try {
-        setLoding(true);
         const response = await axios.get<Invoice[]>("/api/invoices");
-        if (Array.isArray(response.data)) {
-          setInvoices(response.data);
-        } else {
-          throw new Error("Fetched data is not an array");
-        }
-      } catch (err: unknown) {
-        if (axios.isAxiosError(err)) {
-          setError(err.response?.data?.message || "Failed to fetch invoices");
-        } else if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unexpected error occurred");
-        }
+        setInvoices(response.data || []);
+      } catch (error) {
+        console.error("Failed to fetch invoices", error);
+        setInvoices([]); // 确保无数据时也能渲染
       } finally {
-        setLoding(false);
+        setLoading(false); // 加载状态结束
       }
     };
 
     fetchInvoices();
   }, []);
 
-  const statusStyles = useMemo(
-    () => ({
-      background: {
-        paid: "bg-ctGr",
-        pending: "bg-ctYl",
-        draft: "bg-ctGy",
-      },
-      circle: {
-        paid: "bg-ctGr",
-        pending: "bg-ctYl",
-        draft: "bg-black",
-      },
-      text: {
-        paid: "text-ctGr",
-        pending: "text-ctYl",
-        draft: "text-heading-s",
-      },
-    }),
-    []
-  );
-
-  if (error) return <p>Error: {error}</p>;
-  if (!invoices.length) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (invoices.length === 0) return <p>No invoices available</p>;
 
   return (
     <div className="grid gap-y-4 h-vh">
@@ -103,7 +94,7 @@ const MainpageLower: React.FC = () => {
         >
           <span className="blackList text-heading-s font-bold">
             <p className="text-ctBg">#</p>
-            <p className="dark:text-dkwt">{invoice.id}</p>
+            <p className="dark:text-dkwt">{invoice.id || "Unknown ID"}</p>
           </span>
           <span
             className={clsx(
@@ -112,16 +103,20 @@ const MainpageLower: React.FC = () => {
             )}
           >
             Due{" "}
-            {new Intl.DateTimeFormat("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            }).format(new Date(invoice.paymentDue))}
+            {invoice.paymentDue ? (
+              new Intl.DateTimeFormat("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              }).format(new Date(invoice.paymentDue))
+            ) : (
+              <span>Unknown Date</span>
+            )}
           </span>
           <span
             className={clsx("flex items-center text-ctHg", "dark:text-dkwt")}
           >
-            {invoice.clientName}
+            {invoice.clientName || "Unknown name"}
           </span>
           <span
             className={clsx(
@@ -129,9 +124,12 @@ const MainpageLower: React.FC = () => {
               "dark:text-dkwt"
             )}
           >
-            £ {invoice.total.toFixed(2)}
+            £ {invoice.total ? invoice.total.toFixed(2) : "0.00"}
           </span>
-          <StatusBadge status={invoice.status} styles={statusStyles} />
+          <StatusBadge
+            status={invoice.status || "Unknown"}
+            styles={statusStyles}
+          />
           <button className="flex items-center">
             <img src="/images/icon-arrow-right.svg" alt="right" />
           </button>

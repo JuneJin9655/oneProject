@@ -6,7 +6,7 @@ const SidebarIcon: React.FC = () => {
     <div
       className={clsx(
         "relative h-[103px] w-[103px]", // size
-        "overflow-hidden rounded-br-[20px]" // corners
+        "overflow-hidden rounded-br-[20px]", // corners
       )}
     >
       {/* Upper part */}
@@ -20,7 +20,7 @@ const SidebarIcon: React.FC = () => {
               "border-l-[14.425px] border-l-transparent", // left border
               "border-r-[14.425px] border-r-transparent", // right border
               "border-t-[29px] border-t-ctP", // top border
-              "top-[15%] left-[50%] transform -translate-x-1/2 -translate-y-1/2" // position
+              "top-[15%] left-[50%] transform -translate-x-1/2 -translate-y-1/2", // position
             )}
           ></div>
         </div>
