@@ -124,7 +124,10 @@ const MainpageLower: React.FC = () => {
               "dark:text-dkwt"
             )}
           >
-            £ {invoice.total ? invoice.total.toFixed(2) : "0.00"}
+            £{" "}
+            {invoice.total && invoice.total > 0
+              ? invoice.total.toFixed(2)
+              : "0.00"}
           </span>
           <StatusBadge
             status={invoice.status || "Unknown"}

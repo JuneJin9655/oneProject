@@ -8,12 +8,12 @@ const mockAxios = axios as jest.Mocked<typeof axios>;
 
 describe("MainpageLower component", () => {
   afterEach(() => {
-    cleanup(); // 清理每次测试后的 DOM 和状态
-    jest.clearAllMocks(); // 重置所有 mock 数据
+    cleanup();
+    jest.clearAllMocks();
   });
 
   test("renders 'Loading...' when loading state is true", async () => {
-    mockAxios.get.mockImplementationOnce(() => new Promise(() => {})); // 模拟未完成的请求
+    mockAxios.get.mockImplementationOnce(() => new Promise(() => {}));
 
     await act(async () => {
       render(<MainpageLower />);
@@ -22,30 +22,43 @@ describe("MainpageLower component", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
-  test("renders 'No invoices available' when there is no data", async () => {
-    mockAxios.get.mockResolvedValueOnce({ data: [] }); // 模拟空数据
+  test("renders 'No invoices available' for empty or null data", async () => {
+    mockAxios.get.mockResolvedValueOnce({ data: [] });
 
     await act(async () => {
       render(<MainpageLower />);
     });
 
-    await waitFor(() =>
-      expect(screen.getByText("No invoices available")).toBeInTheDocument()
-    );
+    await waitFor(() => {
+      expect(screen.getByText("No invoices available")).toBeInTheDocument();
+    });
+
+    cleanup();
+
+    // 测试 null 数据的情况
+    mockAxios.get.mockResolvedValueOnce({ data: null });
+
+    await act(async () => {
+      render(<MainpageLower />);
+    });
+
+    await waitFor(() => {
+      const noInvoicesElements = screen.getAllByText("No invoices available");
+      expect(noInvoicesElements).toHaveLength(1);
+    });
   });
 
-  test("renders invoice data when invoices are available", async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: [
-        {
-          id: "1",
-          paymentDue: "2024-01-01",
-          clientName: "John Doe",
-          total: 123.45,
-          status: "paid",
-        },
-      ],
-    });
+  test("renders invoice data when available", async () => {
+    const mockData = [
+      {
+        id: "1",
+        paymentDue: "2024-01-01",
+        clientName: "John Doe",
+        total: 123.45,
+        status: "paid",
+      },
+    ];
+    mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
       render(<MainpageLower />);
@@ -57,8 +70,8 @@ describe("MainpageLower component", () => {
     });
   });
 
-  test("handles API error", async () => {
-    mockAxios.get.mockRejectedValueOnce(new Error("Network Error")); // 模拟 API 错误
+  test("handles API error gracefully", async () => {
+    mockAxios.get.mockRejectedValueOnce(new Error("Network Error"));
 
     await act(async () => {
       render(<MainpageLower />);
@@ -69,18 +82,17 @@ describe("MainpageLower component", () => {
     });
   });
 
-  test("renders placeholder text when some fields are missing", async () => {
-    mockAxios.get.mockResolvedValueOnce({
-      data: [
-        {
-          id: null,
-          paymentDue: "",
-          clientName: null,
-          total: undefined,
-          status: "draft",
-        },
-      ],
-    });
+  test("renders placeholders for missing fields", async () => {
+    const mockData = [
+      {
+        id: null,
+        paymentDue: "",
+        clientName: null,
+        total: undefined,
+        status: "draft",
+      },
+    ];
+    mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
       render(<MainpageLower />);
@@ -91,6 +103,69 @@ describe("MainpageLower component", () => {
       expect(screen.getByText("Unknown name")).toBeInTheDocument();
       expect(screen.getByText("£ 0.00")).toBeInTheDocument();
       expect(screen.getByText("Unknown Date")).toBeInTheDocument();
+    });
+  });
+
+  test("handles extreme and invalid values", async () => {
+    const mockData = [
+      {
+        id: "1",
+        paymentDue: "2024-01-01",
+        clientName: "John Doe",
+        total: -123.45,
+        status: "paid",
+      },
+      {
+        id: "2",
+        paymentDue: "2024-12-31",
+        clientName: "Alice & Bob",
+        total: 9999999999.99,
+        status: "pending",
+      },
+      {
+        id: "3",
+        paymentDue: "",
+        clientName: "Charlie",
+        total: 200,
+        status: "draft",
+      },
+      {
+        id: "4",
+        paymentDue: null,
+        clientName: "Dave",
+        total: 300,
+        status: "paid",
+      },
+    ];
+    mockAxios.get.mockResolvedValueOnce({ data: mockData });
+
+    await act(async () => {
+      render(<MainpageLower />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("£ 0.00")).toBeInTheDocument();
+      expect(screen.getByText("£ 9999999999.99")).toBeInTheDocument();
+
+      const unknownDates = screen.getAllByText("Unknown Date");
+      expect(unknownDates).toHaveLength(2);
+    });
+  });
+
+  test("displays correct and fallback status", async () => {
+    const mockData = [
+      { id: "1", status: "paid", total: 100 },
+      { id: "2", status: null, total: 200 },
+    ];
+    mockAxios.get.mockResolvedValueOnce({ data: mockData });
+
+    await act(async () => {
+      render(<MainpageLower />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Paid")).toBeInTheDocument();
+      expect(screen.getByText("Unknown")).toBeInTheDocument();
     });
   });
 });
