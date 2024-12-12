@@ -1,34 +1,38 @@
 import React from "react";
 import clsx from "clsx";
 
-const MainpageUpper: React.FC = () => {
+interface InvoiceHeaderProps {
+  invoiceCount: number;
+}
+
+const InvoiceHeader: React.FC<InvoiceHeaderProps> = ({ invoiceCount }) => {
   return (
     <div
       className={clsx(
-        //position
+        // Position
         "flex items-center justify-between",
-        // size
+        // Size
         "mt-[66px]"
       )}
     >
-      {/* ---------------------------left------------------------- */}
-      <div>
+      {/* Left Section */}
+      <div className="flex flex-col">
         <h1
           className={clsx(
-            //text
+            // Text
             "text-heading-l font-bold dark:text-white"
           )}
         >
           Invoices
         </h1>
         <p className="text-heading-s-variant text-ctHg mt-[12px] dark:text-dkHg">
-          There are 7 totol Invoices
+          There are {invoiceCount} total invoices
         </p>
       </div>
 
-      {/* ---------------------------------right -------------------------*/}
+      {/* Right Section */}
       <div className="flex items-center">
-        {/* -------------------------------list------------------------ */}
+        {/* Filter by Status */}
         <div className="flex">
           <p
             className={clsx(
@@ -43,11 +47,11 @@ const MainpageUpper: React.FC = () => {
             <img src="/images/icon-arrow-down.svg" alt="down" />
           </button>
         </div>
-        {/* ------------------------------button-------------------------- */}
 
+        {/* New Invoice Button */}
         <button
           className={clsx(
-            //base
+            // Base
             "w-[150px] h-[48px] bg-ctP rounded-full",
             "flex ml-[40.54px] items-center"
           )}
@@ -67,4 +71,4 @@ const MainpageUpper: React.FC = () => {
   );
 };
 
-export default MainpageUpper;
+export default InvoiceHeader;

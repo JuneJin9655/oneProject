@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeReducer from "../features/theme/themeSlice";
-import statusReducer from "../features/status/statusSlice";
+import themeReducer from "../features/theme/store/themeSlice";
+import statusReducer from "../features/invoices/store/statusSlice";
 
 export const store = configureStore({
   reducer: {

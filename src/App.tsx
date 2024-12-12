@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./app/store";
-import Sidebar from "./components/Sidebar/Sidebar";
-import Mainpage from "./components/Mainpage/Mainpage";
+import Sidebar from "./shared/components/Sidebar/Sidebar";
+import InvoicePage from "./features/invoices/pages/InvoicePage";
 import clsx from "clsx";
 
 const App: React.FC = () => {
@@ -21,7 +21,7 @@ const App: React.FC = () => {
     <div>
       <div className={clsx("flex h-vh  bg-bg", "dark:bg-dkBg")}>
         <Sidebar />
-        <Mainpage />
+        <InvoicePage />
       </div>
     </div>
   );

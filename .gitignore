@@ -35,11 +35,6 @@ coverage/
 *.sln
 *.sw?
 
-# Mock data
-mocks/
-*.mock.js
-*.mock.ts
-
 # Temporary files
 *.tmp
 *.temp
@@ -48,15 +43,8 @@ mocks/
 .eslintcache
 .prettiercache
 
-# Tailwind CSS
-tailwind.config.js
-tailwind.config.ts
-
 # OS specific files
 Thumbs.db
 desktop.ini
 .AppleDouble
 .LSOverride
-
-# Mock Service Worker
-public/mockServiceWorker.js

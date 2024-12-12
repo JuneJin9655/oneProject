@@ -10,6 +10,6 @@
     "noImplicitAny": false,
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "public/mockServiceWorker.js"],
   "exclude": ["node_modules", "dist"]
 }

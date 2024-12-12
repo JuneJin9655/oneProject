@@ -9,7 +9,7 @@ const Sidebar: React.FC = () => {
       className={clsx(
         "relative min-h-screen w-[103px]", // size
         "rounded-tr-[20px] rounded-br-[20px]",
-        "bg-ltSb dark:bg-dkSb",
+        "bg-ltSb dark:bg-dkSb"
         // background and corners
       )}
     >

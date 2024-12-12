@@ -1,5 +1,5 @@
 import { render, screen, waitFor, act, cleanup } from "@testing-library/react";
-import MainpageLower from "./MainpageLower";
+import InvoicePage from "../InvoicePage";
 import "@testing-library/jest-dom";
 import axios from "axios";
 
@@ -16,7 +16,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockImplementationOnce(() => new Promise(() => {}));
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     expect(screen.getByText("Loading...")).toBeInTheDocument();
@@ -26,7 +26,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockResolvedValueOnce({ data: [] });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -39,7 +39,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockResolvedValueOnce({ data: null });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -61,7 +61,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -74,7 +74,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockRejectedValueOnce(new Error("Network Error"));
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -95,7 +95,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -140,7 +140,7 @@ describe("MainpageLower component", () => {
     mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
@@ -154,18 +154,28 @@ describe("MainpageLower component", () => {
 
   test("displays correct and fallback status", async () => {
     const mockData = [
-      { id: "1", status: "paid", total: 100 },
-      { id: "2", status: null, total: 200 },
+      {
+        id: "1",
+        status: "paid",
+        total: 100,
+        paymentDue: null,
+        clientName: null,
+      },
+      { id: "2", status: null, total: 200, paymentDue: null, clientName: null },
     ];
     mockAxios.get.mockResolvedValueOnce({ data: mockData });
 
     await act(async () => {
-      render(<MainpageLower />);
+      render(<InvoicePage />);
     });
 
     await waitFor(() => {
-      expect(screen.getByText("Paid")).toBeInTheDocument();
-      expect(screen.getByText("Unknown")).toBeInTheDocument();
+      expect(screen.getByText("Paid")).toBeInTheDocument(); // 检查已支付状态
+      expect(screen.getByText("Draft")).toBeInTheDocument(); // 对应 null 状态
+
+      // 使用 getAllByText 检查多个 "Unknown Date"
+      const unknownDates = screen.getAllByText("Unknown Date");
+      expect(unknownDates).toHaveLength(2); // 预期有 2 个元素
     });
   });
 });
